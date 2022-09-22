@@ -1,0 +1,22 @@
+.table-tr {
+  display: flex;
+  .item {
+    flex: 1;
+    height: 30px;
+    line-height: 30px;
+    padding: 10px;
+    border-top: 1px solid #f2f2f2;
+    border-left: 1px solid #f2f2f2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    // border-bottom: 1px solid #f2f2f2;
+  }
+  .item:nth-child(6n) {
+    border-right: 1px solid #f2f2f2;
+  }
+}
+.table-tr:last-child {
+  border-bottom: 1px solid #f2f2f2;
+}
