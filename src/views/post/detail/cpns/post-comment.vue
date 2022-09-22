@@ -31,6 +31,7 @@
       :comment="item"
       :postId="postId"
       :key="item.commentId"
+      @unshiftReplyComments="unshiftReplyComments"
     />
 
     <div
@@ -45,8 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { PostDetailType } from '@/service/api/post/type'
+import { ref } from 'vue'
 import { useUserStore } from '@/store/user'
 import { useMessage } from 'naive-ui'
 
@@ -55,15 +55,13 @@ import CommentItem from './comment-item.vue'
 
 // api 请求
 import { getPostComments, createComment } from '@/service/api/comment/comment'
-import { CommentsType } from '@/service/api/comment/type'
+import { CommentsType, ReplyCommentType } from '@/service/api/comment/type'
 
-
-const { postDetail, postId } = defineProps<{
-  postDetail: PostDetailType | undefined
+const { postId } = defineProps<{
   postId: string
 }>()
 
-const  pageNum = ref(1)
+const pageNum = ref(1)
 
 const message = useMessage()
 const userStore = useUserStore()
@@ -97,6 +95,22 @@ const submitComment = async () => {
 const queryMore = () => {
   pageNum.value = pageNum.value + 1
   getComments(true)
+}
+
+const unshiftReplyComments = ({
+  commentId,
+  data
+}: {
+  commentId: number
+  data: ReplyCommentType
+}) => {
+  const comment = commentList.value.list.find(
+    (item) => item.commentId === commentId
+  )
+  if (comment) {
+    comment.replyComments.list.unshift(data)
+    console.log(commentId, data)
+  }
 }
 </script>
 

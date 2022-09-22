@@ -4,7 +4,9 @@
     <div class="comment-item-right">
       <div class="name">
         <div>{{ replyComment.nickname }}</div>
-        <div class="date">{{ dateFormat(replyComment.createTime, 'YYYY-MM-DD hh:mm') }}</div>
+        <div class="date">
+          {{ dateFormat(replyComment.createTime, 'YYYY-MM-DD hh:mm') }}
+        </div>
       </div>
       <div class="content">{{ replyComment.content }}</div>
       <div class="footer">
@@ -22,12 +24,7 @@
 
 <script setup lang="ts">
 // 组件
-import {
-  HeartOutline,
-  HeartSharp,
-  ChatbubbleEllipsesOutline
-} from '@vicons/ionicons5'
-import ReplyComment from './reply-comment.vue'
+import { HeartOutline } from '@vicons/ionicons5'
 // 工具
 import { dateFormat } from '@/utils/dateFormat'
 

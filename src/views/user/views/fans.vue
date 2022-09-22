@@ -65,7 +65,6 @@ useScrollBottom(() => {
   getFans(true)
 })
 
-
 async function getFans(isConcat = false) {
   const userId = route.params.userId + ''
   const data = await getFansList(userId, pageNum.value)

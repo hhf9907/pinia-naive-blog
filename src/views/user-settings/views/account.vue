@@ -35,7 +35,9 @@
             />
           </n-form-item>
         </n-form>
-        <n-button class="btn" strong type="primary" @click="saveUpdate"> 保存修改 </n-button>
+        <n-button class="btn" strong type="primary" @click="saveUpdate">
+          保存修改
+        </n-button>
       </div>
     </div>
   </div>

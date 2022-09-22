@@ -65,7 +65,6 @@ useScrollBottom(() => {
   getConcerns(true)
 })
 
-
 async function getConcerns(isConcat = false) {
   const userId = route.params.userId + ''
   const data = await getConcernList(userId, pageNum.value)

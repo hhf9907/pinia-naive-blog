@@ -15,6 +15,6 @@ module.exports = {
   rules: {
     'vue/no-setup-props-destructure': 'off',
     'no-unused-vars': 'off',
-    'vue/multi-word-component-names': 'vue/multi-word-component-names'
+    'vue/multi-word-component-names': 'off'
   }
 }

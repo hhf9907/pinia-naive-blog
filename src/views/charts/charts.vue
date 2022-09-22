@@ -28,12 +28,18 @@
       </n-grid-item>
       <n-grid-item>
         <n-card title="近30天登录人数">
-          <bar-echart :y-data="loginCountData.counts" :x-data="loginCountData.days"></bar-echart>
+          <bar-echart
+            :y-data="loginCountData.counts"
+            :x-data="loginCountData.days"
+          ></bar-echart>
         </n-card>
       </n-grid-item>
       <n-grid-item>
         <n-card title="柱状图2">
-          <bar-echart :y-data="loginCountData.counts" :x-data="loginCountData.days"></bar-echart>
+          <bar-echart
+            :y-data="loginCountData.counts"
+            :x-data="loginCountData.days"
+          ></bar-echart>
         </n-card>
       </n-grid-item>
     </n-grid>

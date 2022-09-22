@@ -2,7 +2,10 @@
   <div class="user-settings">
     <div class="container">
       <div class="header">
-        <div class="header-content pointer" @click="toRouter(`/user/${userStore.user.userId}`)">
+        <div
+          class="header-content pointer"
+          @click="toRouter(`/user/${userStore.user.userId}`)"
+        >
           <n-icon
             size="20"
             style="margin-right: 2px"

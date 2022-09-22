@@ -4,7 +4,9 @@
     <div class="comment-item-right">
       <div class="name">
         <div>{{ comment.nickname }}</div>
-        <div class="date">{{ dateFormat(comment.createTime, 'YYYY-MM-DD hh:mm') }}</div>
+        <div class="date">
+          {{ dateFormat(comment.createTime, 'YYYY-MM-DD hh:mm') }}
+        </div>
       </div>
       <div class="content">{{ comment.content }}</div>
       <div class="footer">
@@ -38,7 +40,11 @@
           }"
         />
         <div class="submit-btn">
-          <n-button type="primary" @click="submitReplyComment" :disabled="!replyCommentText">
+          <n-button
+            type="primary"
+            @click="submitReplyComment"
+            :disabled="!replyCommentText"
+          >
             发送评论
           </n-button>
         </div>
@@ -47,6 +53,7 @@
         <ReplyComment
           v-for="item in comment.replyComments.list"
           :replyComment="item"
+          :key="item.commentReplyId"
         />
       </div>
     </div>
@@ -56,11 +63,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 // 组件
-import {
-  HeartOutline,
-  HeartSharp,
-  ChatbubbleEllipsesOutline
-} from '@vicons/ionicons5'
+import { HeartOutline, ChatbubbleEllipsesOutline } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui'
 import ReplyComment from './reply-comment.vue'
 
@@ -71,9 +74,11 @@ import { createReplyComment } from '@/service/api/comment/comment'
 import { dateFormat } from '@/utils/dateFormat'
 
 const { comment, postId } = defineProps<{
-  comment: Comment,
+  comment: Comment
   postId: string
 }>()
+
+const emit = defineEmits(['unshiftReplyComments'])
 
 const message = useMessage()
 const isShowReplyInput = ref(false)
@@ -84,11 +89,16 @@ const showReplyInput = () => {
 }
 
 const submitReplyComment = async () => {
-  const data = await createReplyComment(comment.commentId, replyCommentText.value, postId)
+  const data = await createReplyComment(
+    comment.commentId,
+    replyCommentText.value,
+    postId
+  )
   message.success('回复评论成功')
   replyCommentText.value = ''
   isShowReplyInput.value = false
-  comment.replyComments.list.unshift(data)
+  // comment.replyComments.list.unshift(data)
+  emit('unshiftReplyComments', { commentId: comment.commentId, data })
 }
 </script>
 

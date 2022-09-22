@@ -54,8 +54,7 @@
           富文本编辑器
         </n-radio>
       </n-form-item>
-      <n-form-item label="文章内容">
-      </n-form-item>
+      <n-form-item label="文章内容"> </n-form-item>
     </n-form>
     <markdown-editor
       :modelValue="postModelRef.content"
@@ -75,7 +74,6 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { useMessage, FormRules, FormInst } from 'naive-ui'
-import type { UploadInst, UploadFileInfo } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
 import MarkdownEditor from '@/common/markdown-edit'
 import WangEdit from '@/common/wangeditor'
@@ -168,17 +166,14 @@ const handleValidateButtonClick = (e: MouseEvent) => {
           : createPost(postModelRef)
         message.success('发布成功')
         router.replace('/')
-      } catch (error) {}
+      } catch (error) {
+        console.error(error)
+      }
     }
   })
 }
 const handleChange = (e: Event) => {
   postModelRef.editorType = Number((e.target as HTMLInputElement).value)
-}
-
-const handleFileChange = (options: { fileList: UploadFileInfo[] }) => {
-  // fileListLengthRef.value = options.fileList.length
-  console.log(options)
 }
 </script>
 

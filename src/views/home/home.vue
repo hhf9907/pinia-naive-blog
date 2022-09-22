@@ -32,6 +32,7 @@
         v-for="item in postList"
         :postItem="item"
         @handleDelete="handleDelete"
+        :key="item.postId"
       />
     </div>
     <n-back-top :right="100" />
@@ -40,7 +41,7 @@
 
 <script setup lang="ts">
 // EyeOutline
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { getAllCategory } from '@/service/api/category/cagegory'

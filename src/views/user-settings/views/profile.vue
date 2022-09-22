@@ -50,18 +50,19 @@
             />
           </n-form-item>
         </n-form>
-        <n-button class="btn" strong type="primary" @click="saveUpdate"> 保存修改 </n-button>
+        <n-button class="btn" strong type="primary" @click="saveUpdate">
+          保存修改
+        </n-button>
       </div>
       <div class="avatar">
         <n-upload
-          :action="BASE_URL+'/upload/avatar'"
+          :action="BASE_URL + '/upload/avatar'"
           :headers="{
-            'Authorization': token
+            Authorization: token
           }"
           name="avatar"
           :show-file-list="false"
-          :data="{
-          }"
+          :data="{}"
           @finish="handleFinish"
         >
           <n-avatar

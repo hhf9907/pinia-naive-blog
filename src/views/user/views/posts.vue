@@ -12,6 +12,7 @@
           v-for="item in postList"
           :postItem="item"
           @handleDelete="handleDelete"
+          :key="item.postId"
         />
       </template>
       <div v-else class="empty">
@@ -23,7 +24,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref } from 'vue'
 import { getAllCategory } from '@/service/api/category/cagegory'
 import { CategoryType } from '@/service/api/category/type'
 import { getPostListByUserId } from '@/service/api/post/post'

@@ -38,6 +38,7 @@
             :style="{ padding: `10px 0 10px ${(anchor.indent + 1) * 20}px` }"
             @click="handleAnchorClick(anchor)"
             :title="anchor.title"
+            :key="anchor.title"
           >
             <a>{{ anchor.title }}</a>
           </div>
@@ -74,16 +75,15 @@ const postId =
 
 let _scroll: any = undefined
 let listenScrollTopFn: any = undefined
-let _onresize: any = undefined
 
 const { isLTWindow, clientWidth } = useListenerResize(1090)
 // 监听滚动
 onMounted(() => {
-  _scroll = debounce((e: Event) => {
+  _scroll = debounce(() => {
     const scrollTop = document.documentElement.scrollTop
     setLineIndex(scrollTop)
   }, 100)
-  listenScrollTopFn = (e: Event) => {
+  listenScrollTopFn = () => {
     const scrollTop = document.documentElement.scrollTop
     if (scrollTop >= 422) {
       isFixed.value = true
@@ -271,8 +271,6 @@ const updateRelation = (isRelation: number) => {
         line-height: 2rem;
         color: #1d2129;
         border-bottom: 1px solid #e4e6eb;
-      }
-      .catalogue-item {
       }
       .catalogue-item:hover {
         background-color: #f7f8fa;
