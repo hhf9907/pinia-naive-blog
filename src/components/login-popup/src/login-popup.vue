@@ -123,7 +123,7 @@ const isEmailLogin = ref(false)
 const userStore = useUserStore()
 const message = useMessage()
 const router = useRouter()
-const timer = ref(0)
+const timer = ref()
 const countdown = ref(60)
 const isSend = ref(false)
 // 弹框时禁止滚动
@@ -175,7 +175,7 @@ async function emailLogin() {
     return
   }
 
-  await userStore.handleEmailLogin({
+  await userStore.emailLogin({
     email: email.value.trim(),
     code: code.value,
     token: localCache.getCache('emailCodeToken')

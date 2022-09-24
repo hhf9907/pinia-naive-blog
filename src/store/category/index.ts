@@ -1,19 +1,13 @@
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 import { CategoryType } from '@/service/api/category/type'
 
-export const useCategoryStore = defineStore({
-  id: 'category',
-  state: () => ({
-    categoryList: new Array<CategoryType>()
-  }),
+export const useCategoryStore = defineStore('category', () => {
+  const categoryList = ref<CategoryType[]>()
 
-  actions: {
-    update(categoryList: CategoryType[]) {
-      this.$patch({
-        categoryList: categoryList
-      })
-    }
+  const update = (list: CategoryType[]) => {
+    categoryList.value = list
   }
-})
 
-export default useCategoryStore
+  return { categoryList, update }
+})

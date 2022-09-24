@@ -10,9 +10,9 @@ export interface UserInfoType {
   phone: null
   pvTotal: string
   userId: string
-  homePage: string,
-  createTime: string,
-  isConcern: number,
+  homePage: string
+  createTime: string
+  isConcern: number
   beCollectedTotal: number // 被收藏总数
 }
 
@@ -28,8 +28,8 @@ export interface UpdateAccountType {
 }
 
 export interface RelationDetailType {
-  avatar:    null | string;
-  isConcern: number;
-  nickname:  string;
-  userId:    string;
+  avatar: null | string
+  isConcern: number
+  nickname: string
+  userId: string
 }

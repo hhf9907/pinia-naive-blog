@@ -78,7 +78,7 @@ const route = useRoute()
 const userStore = useUserStore()
 
 onMounted(() => {
-  if (localCache.getCache('token')) {
+  if (userStore.token) {
     isShowPic.value = true
   }
 })

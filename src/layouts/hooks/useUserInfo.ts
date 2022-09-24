@@ -8,7 +8,7 @@ export default function useUserInfo(isShowPic: Ref) {
     nickname: ''
   })
   const userStore = useUserStore()
-  if (localCache.getCache('token')) {
+  if (userStore.token) {
     isShowPic.value = true
     const userInfo = userStore.user
     user.avatar = userInfo.avatar

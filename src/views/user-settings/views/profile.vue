@@ -82,13 +82,12 @@
 import { reactive } from 'vue'
 import { useUserStore } from '@/store/user'
 import { BASE_URL } from '@/service/request/config'
-import localCache from '@/utils/cache'
 import { updateBaseInfo } from '@/service/api/user/user'
 import { useMessage } from 'naive-ui'
 
 const userStore = useUserStore()
 const message = useMessage()
-const token = localCache.getCache('token')
+const token = userStore.token
 const dataForm = reactive({
   nickname: userStore.user.nickname,
   homePage: userStore.user.homePage,

@@ -1,17 +1,13 @@
 import { defineStore } from 'pinia'
-export const useMainStore = defineStore({
-  id: 'main',
-  state: () => ({
-    isRefresh: false
-  }),
+import { ref } from 'vue'
 
-  actions: {
-    updateRefresh(isRefresh: boolean) {
-      this.$patch({
-        isRefresh: isRefresh
-      })
-    }
+export const useMainStore = defineStore('main', () => {
+  const isRefresh = ref(false)
+  const updateRefresh = (isRef: boolean) => {
+    isRefresh.value = isRef
   }
+
+  return { isRefresh, updateRefresh }
 })
 
 export default useMainStore

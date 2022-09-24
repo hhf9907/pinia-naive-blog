@@ -1,5 +1,10 @@
 import hfRequest from '../../index'
-import { UserInfoType, UpdateInfoType, UpdateAccountType, RelationDetailType } from './type'
+import {
+  UserInfoType,
+  UpdateInfoType,
+  UpdateAccountType,
+  RelationDetailType
+} from './type'
 enum userApi {
   GET_USER_INFO_BY_ID = '/user/getUserInfo/',
   UPDATE_USER_BASE_INFO = '/user/updateBaseInfo',
@@ -7,7 +12,7 @@ enum userApi {
   CONCERN_USER = '/user/concern/',
   CANCEL_CONCERN_USER = '/user/cancelConcern/',
   GET_CONCERN_LIST = '/user/queryConcernList',
-  GET_FANS_LIST = '/user/queryFansList' 
+  GET_FANS_LIST = '/user/queryFansList'
 }
 
 export function getUserInfoById(userId: string) {
@@ -44,8 +49,8 @@ export function cancelConcernUser(userId = '') {
 
 export function getConcernList(userId: string, pageNum = 1) {
   return hfRequest.get<{
-    count: number,
-    list: RelationDetailType[],
+    count: number
+    list: RelationDetailType[]
     pages: number
   }>({
     url: userApi.GET_CONCERN_LIST,
@@ -58,8 +63,8 @@ export function getConcernList(userId: string, pageNum = 1) {
 
 export function getFansList(userId: string, pageNum = 1) {
   return hfRequest.get<{
-    count: number,
-    list: RelationDetailType[],
+    count: number
+    list: RelationDetailType[]
     pages: number
   }>({
     url: userApi.GET_FANS_LIST,
