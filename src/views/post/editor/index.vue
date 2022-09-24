@@ -75,8 +75,11 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useMessage, FormRules, FormInst } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
-import MarkdownEditor from '@/common/markdown-edit'
-import WangEdit from '@/common/wangeditor'
+
+// components
+import MarkdownEditor from '@/components/markdown-edit'
+import WangEdit from '@/components/wangeditor'
+
 import { PostModelType } from '@/service/api/post/type'
 import { createPost, updatePost, getPostById } from '@/service/api/post/post'
 import { CategoryType } from '@/service/api/category/type'

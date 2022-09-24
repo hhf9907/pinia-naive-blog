@@ -56,7 +56,7 @@
       </div>
       <div class="avatar">
         <n-upload
-          :action="BASE_URL + '/upload/avatar'"
+          :action="`${BASE_URL}/upload/avatar`"
           :headers="{
             Authorization: token
           }"
