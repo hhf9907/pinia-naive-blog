@@ -1,13 +1,9 @@
 <template>
   <div class="app">
     <app-provider>
-      <router-view v-slot="{ Component }">
-        <keep-alive>
-          <component :is="Component"></component>
-        </keep-alive>
-      </router-view>
+      <router-view />
     </app-provider>
-    <n-back-top :right="100" listen-to="app" />
+    <n-back-top style="z-index: 9999" :right="100" listen-to="app" />
   </div>
 </template>
 
