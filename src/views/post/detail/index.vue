@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, onUnmounted } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useMessage } from 'naive-ui'
 
@@ -221,16 +221,20 @@ const updateRelation = (isRelation: number) => {
   padding-top: 20px;
   display: flex;
   justify-content: space-between;
+
   .skeleton {
     background-color: #fff;
     box-sizing: border-box;
     padding: 20px;
   }
+
   .left {
     width: 820px;
   }
+
   .right {
     width: 300px;
+
     .recom {
       box-sizing: border-box;
       padding: 20px;
@@ -239,22 +243,28 @@ const updateRelation = (isRelation: number) => {
       background-color: #fff;
       margin-bottom: 20px;
     }
+
     :deep(.catalogue::-webkit-scrollbar) {
       width: 5px; /*滚动条宽度*/
       height: 10px; /*滚动条高度*/
     }
+
     /*定义滚动条轨道 内阴影+圆角*/
+
     :deep(.catalogue::-webkit-scrollbar-track) {
       box-shadow: 0px 1px 3px #f1f1f1 inset; /*滚动条的背景区域的内阴影*/
       border-radius: 10px; /*滚动条的背景区域的圆角*/
       background-color: #f1f1f1; /*滚动条的背景颜色*/
     }
+
     /*定义滑块 内阴影+圆角*/
+
     :deep(.catalogue::-webkit-scrollbar-thumb) {
       box-shadow: 0px 1px 3px #c1c1c1 inset; /*滚动条的内阴影*/
       border-radius: 10px; /*滚动条的圆角*/
       background-color: #c1c1c1; /*滚动条的背景颜色*/
     }
+
     .catalogue {
       box-sizing: border-box;
       width: 300px;
@@ -264,6 +274,7 @@ const updateRelation = (isRelation: number) => {
       background-color: #fff;
       position: relative;
       padding-right: 10px;
+
       .title {
         font-weight: 500;
         padding: 10px 20px;
@@ -272,12 +283,15 @@ const updateRelation = (isRelation: number) => {
         color: #1d2129;
         border-bottom: 1px solid #e4e6eb;
       }
+
       .catalogue-item:hover {
         background-color: #f7f8fa;
       }
+
       .catalogue-item.active {
         color: #18a058;
         position: relative;
+
         ::before {
           content: '';
           position: absolute;
@@ -291,6 +305,7 @@ const updateRelation = (isRelation: number) => {
         }
       }
     }
+
     .catalogue.fixed {
       position: fixed;
       top: 81px;

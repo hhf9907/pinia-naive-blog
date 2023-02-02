@@ -9,13 +9,13 @@ let UPLOAD_TYPE = 1 // 1 七牛云上传， 2 上传到node服务器
 console.log(import.meta.env.MODE)
 
 if (import.meta.env.MODE === 'production') {
-  BASE_URL = 'https://blog-api.coderhhf.cn'
+  // BASE_URL = 'https://blog-api.coderhhf.cn'
   BASE_NAME = 'prod'
   TIME_OUT = 20000
   UPLOAD_TYPE = 1
 } else if (import.meta.env.MODE === 'development') {
-  BASE_URL = 'https://blog-api.coderhhf.cn'
-  // BASE_URL = 'http://127.0.0.1:3002'
+  // BASE_URL = 'https://blog-api.coderhhf.cn'
+  BASE_URL = 'http://127.0.0.1:3000'
   BASE_NAME = 'dev'
   TIME_OUT = 20000
   UPLOAD_TYPE = 1
