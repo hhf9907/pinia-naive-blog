@@ -64,18 +64,18 @@ import useListenerResize from '@/hooks/useListenerResize'
 import menuOptions from './config/menu-option'
 import { menuKey } from '../layout-header/config/menu-keys'
 
+const router = useRouter()
+const route = useRoute()
+const userStore = useUserStore()
+
 const activeKey = ref<string>('')
-const searchValue = ref<string | null>('')
+const searchValue = ref<string | null>(String(route.query.keyword) || '')
 
 const isShowPic = ref(false)
 const showLogin = ref(false)
 const showReg = ref(false)
 const showReset = ref(false)
 const routeLabel = ref('首页')
-
-const router = useRouter()
-const route = useRoute()
-const userStore = useUserStore()
 
 onMounted(() => {
   if (userStore.token) {
@@ -177,18 +177,22 @@ const handleSelect = (key: string) => {
   background: #fff;
   z-index: 100;
   border-bottom: 1px solid #f1f1f1;
+
   .layout-header-start {
     // flex: 1;
     width: 250px;
   }
+
   .layout-header-end {
     flex: 2;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     .search-input {
       width: 250px;
     }
+
     .search-icon {
       cursor: pointer;
     }
@@ -198,6 +202,7 @@ const handleSelect = (key: string) => {
       display: flex;
       justify-content: flex-end;
       align-items: center;
+
       .username {
         cursor: pointer;
         max-width: 100px;
@@ -208,6 +213,7 @@ const handleSelect = (key: string) => {
       }
     }
   }
+
   .layout-header-menu {
     height: 100%;
     flex: 3;

@@ -1,11 +1,7 @@
 <template>
   <div class="app">
     <app-provider>
-      <router-view v-slot="{ Component }">
-        <keep-alive>
-          <component :is="Component"></component>
-        </keep-alive>
-      </router-view>
+      <router-view></router-view>
     </app-provider>
     <n-back-top :right="100" listen-to="app" />
   </div>
@@ -19,6 +15,7 @@ import AppProvider from './AppProvider.vue'
 .app {
   height: 100%;
 }
+
 body {
   margin: 0;
 }

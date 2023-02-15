@@ -41,9 +41,9 @@
 
 <script setup lang="ts">
 // EyeOutline
-import { ref, reactive } from 'vue'
-import { useRoute } from 'vue-router'
-
+import { ref, reactive, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useMessage, useDialog } from 'naive-ui'
 import { getAllCategory } from '@/service/api/category/cagegory'
 import { CategoryType } from '@/service/api/category/type'
 import { List } from '@/service/api/post/type'
@@ -58,25 +58,38 @@ import useListenerResize from '@/hooks/useListenerResize'
 import homeHeader from './cpns/header.vue'
 import PostItem from '@/components/post-item/post-item.vue'
 
-console.log('home page')
-
 const route = useRoute()
+const router = useRouter()
 const categoryList = ref<CategoryType[]>([])
 const postList = ref<List[]>([])
 const categoryId = ref(Number(route.query.categoryId) || null)
 const queryParams = reactive({
   pageNum: 1,
   pageSize: 10,
-  keyword: '',
+  keyword: route.query.keyword || '',
   categoryId: categoryId,
   queryType: 2
 })
 const pages = ref(1)
 
 bus.$on('searchPost', (value: string) => {
-  queryParams.keyword = value
-  queryPostList()
+  router.replace({
+    path: '/home',
+    query: {
+      ...route.query,
+      keyword: value
+    }
+  })
 })
+
+watch(
+  () => route.params,
+  () => {
+    queryParams.keyword = route.query.keyword || ''
+    queryPostList()
+    // 处理路由参数变化的逻辑
+  }
+)
 
 const { isLTWindow, clientWidth } = useListenerResize(900)
 useScrollBottom(() => {
@@ -93,6 +106,7 @@ async function getCategoryData() {
   categoryList.value = await getAllCategory()
   queryPostList()
 }
+
 async function queryPostList(isConcat = false) {
   const data = await getPostList(queryParams)
   const list = data.list
@@ -117,11 +131,13 @@ async function queryPostList(isConcat = false) {
 
 // 事件监听
 const checkCategory = (id: number | null) => {
+  queryParams.pageNum = 1
   categoryId.value = id
   queryPostList()
 }
 
 const checkQueryType = (type: number) => {
+  queryParams.pageNum = 1
   queryParams.queryType = type
   queryPostList()
 }
@@ -141,6 +157,7 @@ const handleDelete = (postId: string) => {
     width: 100%;
     z-index: 10;
     border-bottom: 1px solid #f1f1f1;
+
     .select-post-order {
       display: flex;
       width: 960px;
@@ -149,9 +166,11 @@ const handleDelete = (postId: string) => {
       box-sizing: border-box;
       padding-left: 20px;
       margin: 0 auto;
+
       .item {
         width: 50px;
       }
+
       .item.active {
         color: #18a058;
       }

@@ -10,9 +10,12 @@
           width="70%"
         />
         <div style="width: 400px; text-align: right">
-          <n-button type="primary" @click="handleValidateButtonClick"
-            >点击提交</n-button
-          >
+          <n-button
+            :loading="isRequestLoading"
+            type="primary"
+            @click="handleValidateButtonClick"
+            >点击提交
+          </n-button>
         </div>
       </n-form-item>
       <n-form-item path="postIntro" label="文章简介">
@@ -54,7 +57,7 @@
           富文本编辑器
         </n-radio>
       </n-form-item>
-      <n-form-item label="文章内容"> </n-form-item>
+      <n-form-item label="文章内容"></n-form-item>
     </n-form>
     <markdown-editor
       :modelValue="postModelRef.content"
@@ -91,6 +94,8 @@ const route = useRoute()
 const formRef = ref<FormInst | null>(null)
 const message = useMessage()
 const isUpdate = ref(route.query.type === 'edit' ? true : false)
+const isRequestLoading = ref(false)
+
 const postModelRef = reactive<PostModelType>({
   postName: '',
   postIntro: '',
@@ -159,17 +164,22 @@ const handleValidateButtonClick = (e: MouseEvent) => {
   e.preventDefault()
   formRef.value?.validate(async (errors) => {
     if (!errors) {
+      postModelRef.categoryIds = categoryIds?.value?.join(',')
+      if (!postModelRef.categoryIds) {
+        return message.warning('请请选择文章分类~')
+      }
       if (!postModelRef.content) {
         return message.warning('请输入文章的内容~')
       }
-      postModelRef.categoryIds = categoryIds.value.join(',')
+      isRequestLoading.value = true
       try {
-        ;(await isUpdate.value)
-          ? updatePost(postModelRef)
-          : createPost(postModelRef)
+        const requestFn = isUpdate.value ? updatePost : createPost
+        await requestFn(postModelRef)
         message.success('发布成功')
+        isRequestLoading.value = false
         router.replace('/')
       } catch (error) {
+        isRequestLoading.value = false
         console.error(error)
       }
     }
