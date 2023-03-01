@@ -1,54 +1,31 @@
-interface IEvent {
-  eventName: string
-  eventFn: eventFnType
-}
+class EventBus {
+  private events: { [key: string]: ((data: any) => void)[] } = {}
 
-interface IEvents {
-  [eventName: string]: IEvent[]
-}
-
-type eventFnType = (option: any) => void
-
-class Event {
-  events: IEvents
-  constructor() {
-    this.events = {}
-  }
-
-  $on(eventName: string, eventFn: eventFnType) {
-    let handlers = this.events[eventName]
-    if (!handlers) {
-      handlers = []
-      this.events[eventName] = handlers
+  $on(event: string, callback: (data: any) => void) {
+    if (!this.events[event]) {
+      this.events[event] = []
     }
-    handlers.push({
-      eventName,
-      eventFn
-    })
+
+    this.events[event].push(callback)
   }
 
-  $off(eventName: string, callback: eventFnType) {
-    const handlers = this.events[eventName]
-    if (!handlers) return
-    for (let i = 0; i < handlers.length; i++) {
-      if (
-        handlers[i].eventName === eventName &&
-        handlers[i].eventFn === callback
-      ) {
-        handlers.splice(i, 1)
-      }
+  $off(event: string, callback: (data: any) => void) {
+    if (!this.events[event]) {
+      return
     }
+
+    this.events[event] = this.events[event].filter((cb) => cb !== callback)
   }
 
-  $emit(eventName: string, option: any) {
-    const handlers = this.events[eventName]
-    if (!handlers) return
-    handlers.forEach((item) => {
-      if (item.eventName === eventName) {
-        item.eventFn(option)
-      }
+  $emit(event: string, data: any) {
+    if (!this.events[event]) {
+      return
+    }
+
+    this.events[event].forEach((callback) => {
+      callback(data)
     })
   }
 }
 
-export default new Event()
+export default new EventBus()

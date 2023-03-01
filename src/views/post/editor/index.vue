@@ -162,7 +162,7 @@ const handleValidateButtonClick = (e: MouseEvent) => {
       if (!postModelRef.content) {
         return message.warning('请输入文章的内容~')
       }
-      postModelRef.categoryIds = categoryIds.value.join(',')
+      postModelRef.categoryIds = categoryIds?.value?.join(',') || ''
       try {
         ;(await isUpdate.value)
           ? updatePost(postModelRef)
