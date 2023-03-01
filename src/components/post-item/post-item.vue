@@ -78,7 +78,7 @@ import {
   ChatbubbleEllipsesOutline
 } from '@vicons/ionicons5'
 import { useRouter } from 'vue-router'
-import { useMessage } from 'naive-ui'
+import { useMessage, useDialog } from 'naive-ui'
 import { useUserStore } from '@/store/user'
 import { CategoryType } from '@/service/api/category/type'
 import { List } from '@/service/api/post/type'
@@ -102,6 +102,7 @@ const emit = defineEmits(['handleDelete'])
 const router = useRouter()
 const message = useMessage()
 const userStore = useUserStore()
+const dialog = useDialog()
 
 const toPostPage = (postId: string) => {
   router.push(`/post/${postId}`)
@@ -125,6 +126,7 @@ const toPostEdit = (postId: string) => {
 
 const handleSelect = async (key: string, postId: string) => {
   if (key === 'delete') {
+    await handleConfirm()
     await deletePost(postId)
     message.success('删除成功')
     emit('handleDelete', postId)
@@ -139,46 +141,73 @@ const collect = async (post: List) => {
   post.isCollect = post.isCollect ? 0 : 1
   message.success(post.isCollect ? '收藏成功' : '取消收藏成功')
 }
+
+const handleConfirm = () => {
+  return new Promise((resolve, reject) => {
+    dialog.warning({
+      title: '警告',
+      content: '你确定要删除该文章吗？',
+      positiveText: '确定',
+      negativeText: '取消',
+      onPositiveClick: () => {
+        resolve(true)
+      },
+      onNegativeClick: () => {
+        reject(false)
+      }
+    })
+  })
+}
 </script>
 
 <style scoped lang="less">
 .n-card {
   margin-bottom: 5px;
+
   .header {
     font-size: 13px;
     color: #86909c;
+
     .header-line {
       padding: 0 5px;
     }
   }
+
   :deep(.n-card-header) {
     padding-top: 10px !important;
     padding-bottom: 5px !important;
   }
+
   .header-extra {
     display: flex;
     align-items: center;
   }
+
   .header-extra-nickname {
     margin-left: 10px;
   }
+
   .post-name {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 15px;
   }
+
   :deep(.n-card__footer) {
     padding: 10px 0;
   }
+
   .n-card-footer {
     font-size: 13px;
     display: flex;
     align-items: center;
+
     .n-card-footer-text {
       margin-left: 5px;
     }
   }
 }
+
 .n-card:hover {
   background-color: #fafafa;
 }

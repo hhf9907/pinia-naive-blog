@@ -1,40 +1,41 @@
 import { App } from 'vue'
 import {
-  // create naive ui
   create,
-  // component
-  NButton,
-  NSpace,
-  NLayout,
-  NLayoutHeader,
-  NLayoutFooter,
-  NLayoutContent,
-  NMenu,
-  NGradientText,
-  NScrollbar,
-  NInput,
-  NIcon,
   NAvatar,
-  NEllipsis,
-  NPopselect,
-  NMessageProvider,
+  NBackTop,
+  NButton,
   NCard,
-  NCheckbox,
-  NGrid,
-  NGi,
   NCarousel,
-  NGridItem,
+  NCheckbox,
+  NDescriptions,
+  NDescriptionsItem,
+  NDropdown,
+  NEllipsis,
+  NEmpty,
   NForm,
   NFormItem,
-  NSelect,
-  NRadio,
-  NSkeleton,
-  NDropdown,
-  NPopconfirm,
-  NBackTop,
-  NUpload,
+  NGi,
+  NGradientText,
+  NGrid,
+  NGridItem,
+  NIcon,
+  NInput,
+  NLayout,
+  NLayoutContent,
+  NLayoutFooter,
+  NLayoutHeader,
   NMention,
-  NEmpty
+  NMenu,
+  NMessageProvider,
+  NPopconfirm,
+  NPopselect,
+  NRadio,
+  NScrollbar,
+  NSelect,
+  NSkeleton,
+  NSpace,
+  NUpload,
+  NDialogProvider
 } from 'naive-ui'
 
 const naive = create({
@@ -70,7 +71,10 @@ const naive = create({
     NBackTop,
     NUpload,
     NMention,
-    NEmpty
+    NEmpty,
+    NDescriptions,
+    NDescriptionsItem,
+    NDialogProvider
   ]
 })
 

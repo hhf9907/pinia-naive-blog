@@ -9,16 +9,32 @@
       >
     </n-card>
     <n-card title="生产依赖" hoverable>
-      <HFTable :dataList="dependencies" />
+      <!--      <HFTable :dataList="dependencies" />-->
+      <n-descriptions label-placement="top" bordered :column="6">
+        <n-descriptions-item
+          :label="key"
+          v-for="(item, key) in dependencies"
+          :key="key"
+        >
+          {{ item }}
+        </n-descriptions-item>
+      </n-descriptions>
     </n-card>
     <n-card class="dev" title="开发依赖" hoverable>
-      <HFTable :dataList="devDependencies" />
+      <n-descriptions label-placement="top" bordered :column="6">
+        <n-descriptions-item
+          :label="key"
+          v-for="(item, key) in devDependencies"
+          :key="key"
+        >
+          {{ item }}
+        </n-descriptions-item>
+      </n-descriptions>
     </n-card>
   </div>
 </template>
 
 <script lang="ts" setup>
-import HFTable from '@/common/hf-table'
 import packageJson from '../../../package.json'
 // 生产依赖
 const dependencies = packageJson.dependencies
@@ -30,6 +46,7 @@ const devDependencies = packageJson.devDependencies
 <style lang="less" scoped>
 .about-project {
   padding: 20px;
+
   .dev {
     margin-top: 20px;
   }
