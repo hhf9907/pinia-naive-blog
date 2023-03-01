@@ -11,9 +11,19 @@
         />
         <div style="width: 400px; text-align: right">
           <n-button type="primary" @click="handleValidateButtonClick"
-            >点击提交</n-button
-          >
+            >点击提交
+          </n-button>
         </div>
+      </n-form-item>
+      <n-form-item path="cover" label="文章封面">
+        <n-upload
+          action=""
+          :custom-request="uploadCover"
+          :default-file-list="previewFileList"
+          list-type="image-card"
+          :max="1"
+          accept=".png,.jpg,.PNG,.JPG"
+        />
       </n-form-item>
       <n-form-item path="postIntro" label="文章简介">
         <n-input
@@ -54,7 +64,7 @@
           富文本编辑器
         </n-radio>
       </n-form-item>
-      <n-form-item label="文章内容"> </n-form-item>
+      <n-form-item label="文章内容"></n-form-item>
     </n-form>
     <markdown-editor
       :modelValue="postModelRef.content"
@@ -72,18 +82,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
-import { useMessage, FormRules, FormInst } from 'naive-ui'
+import { onMounted, reactive, ref } from 'vue'
+import {
+  FormInst,
+  FormRules,
+  UploadCustomRequestOptions,
+  useMessage
+} from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
+import { getUploadToken, uploadFile } from '@/service/api/file/file'
+import qiniuUpload from '@/service/qiniu-upload/index'
 
 // components
 import MarkdownEditor from '@/components/markdown-edit-v3'
 import WangEdit from '@/components/wangeditor'
 
 import { PostModelType } from '@/service/api/post/type'
-import { createPost, updatePost, getPostById } from '@/service/api/post/post'
+import { createPost, getPostById, updatePost } from '@/service/api/post/post'
 import { CategoryType } from '@/service/api/category/type'
 import { getAllCategory } from '@/service/api/category/cagegory'
+import { UPLOAD_TYPE } from '@/service/request/config'
 
 const MdRef = ref()
 const router = useRouter()
@@ -94,6 +112,7 @@ const isUpdate = ref(route.query.type === 'edit' ? true : false)
 const postModelRef = reactive<PostModelType>({
   postName: '',
   postIntro: '',
+  cover: '',
   editorType: 1,
   content: '',
   categoryIds: ''
@@ -163,10 +182,10 @@ const handleValidateButtonClick = (e: MouseEvent) => {
         return message.warning('请输入文章的内容~')
       }
       postModelRef.categoryIds = categoryIds?.value?.join(',') || ''
+      const reuqestFn = isUpdate.value ? updatePost : createPost
       try {
-        ;(await isUpdate.value)
-          ? updatePost(postModelRef)
-          : createPost(postModelRef)
+        await reuqestFn(postModelRef)
+
         message.success('发布成功')
         router.replace('/')
       } catch (error) {
@@ -177,6 +196,27 @@ const handleValidateButtonClick = (e: MouseEvent) => {
 }
 const handleChange = (e: Event) => {
   postModelRef.editorType = Number((e.target as HTMLInputElement).value)
+}
+
+const uploadCover = async (options: UploadCustomRequestOptions) => {
+  console.log(options.file.file)
+  const file = options.file.file
+  if (!file) {
+    return
+  }
+  if (UPLOAD_TYPE === 2) {
+    // 上传到自己服务器
+    const formData = new FormData()
+    formData.append('picture', file)
+    const [imgurl] = await uploadFile(formData)
+    postModelRef.cover = imgurl
+  } else {
+    // 七牛云
+    const token = await getUploadToken()
+
+    const url = await qiniuUpload(file, token)
+    postModelRef.cover = url as string
+  }
 }
 </script>
 

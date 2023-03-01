@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import { useRoute, useRouter, RouteLocationNormalizedLoaded } from 'vue-router'
+import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 import { EyeOutline, StarOutline } from '@vicons/ionicons5'
 import { getUserInfoById } from '@/service/api/user/user'
 import { UserInfoType } from '@/service/api/user/type'
@@ -74,6 +74,9 @@ onMounted(() => {
 watch(
   route,
   (toRoute: RouteLocationNormalizedLoaded) => {
+    if (!toRoute.params.userId) {
+      return
+    }
     if (toRoute.params.userId !== userId.value) {
       userId.value = toRoute.params.userId + ''
       getUserInfo()
@@ -95,53 +98,66 @@ const toRouter = (name: string) => {
   padding-top: 20px;
   margin: 0 auto;
   display: flex;
+
   .user-left {
     width: 710px;
   }
+
   .user-right {
     flex: 1;
     margin-left: 20px;
+
     .user-achievement {
       box-sizing: border-box;
       height: 164px;
       background-color: #fff;
+
       h3 {
         margin: 0;
         padding: 14px;
         border-bottom: 1px solid rgba(230, 230, 231, 0.5);
       }
+
       .user-data {
         padding: 14px;
+
         .user-data-item {
           display: flex;
           align-items: center;
           margin-top: 10px;
+
           .text {
             margin-left: 10px;
           }
         }
       }
     }
+
     .concern-and-fans {
       margin-top: 20px;
       background-color: #fff;
       height: 76px;
       display: flex;
+
       .item {
         flex: 1;
         padding: 16px 0;
+
         .text {
           text-align: center;
           color: #31445b;
         }
+
         .num {
           text-align: center;
           font-weight: 600;
         }
       }
     }
+
     .more {
       margin-top: 20px;
+
       .more-item {
         display: flex;
         padding: 15px 5px;
@@ -150,6 +166,7 @@ const toRouter = (name: string) => {
         color: #000;
         border-top: 1px solid rgba(230, 230, 231, 0.5);
       }
+
       .more-item:hover {
         color: #18a058;
       }

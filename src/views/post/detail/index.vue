@@ -163,8 +163,7 @@ const handleAnchorClick = (eleId: string) => {
   if (offsetTop) {
     // 滚动到指定的位置
     window.scrollTo({
-      top: offsetTop + 100,
-      behavior: 'smooth'
+      top: offsetTop + 100
     })
   }
 }

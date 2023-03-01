@@ -57,29 +57,33 @@
             style="margin-right: 10px"
             size="mini"
             @click="handleSendEmailCode"
-            >{{ isSend ? countdown : '发送验证码' }}</n-button
-          >
+            >{{ isSend ? countdown : '发送验证码' }}
+          </n-button>
         </div>
       </template>
       <n-checkbox v-model:checked="isSavePassword" style="margin-right: 12px">
         记住密码
       </n-checkbox>
       <div class="submit-box">
-        <div class="login-btn btn" @click="loginClick">登录</div>
-        <div class="reg-btn btn" @click="reg">注册</div>
+        <div class="login-btn btn" style="width: 100%" @click="loginClick">
+          登录
+        </div>
       </div>
-      <div class="reset-pass" @click="isEmailLogin = !isEmailLogin">
-        {{ isEmailLogin ? '点击账号密码登录' : '点击邮箱登录' }}
-      </div>
+      <n-space justify="space-between">
+        <div class="reset-pass" @click="isEmailLogin = !isEmailLogin">
+          {{ isEmailLogin ? '点击账号密码登录' : '点击邮箱登录' }}
+        </div>
+        <div class="reset-pass" @click="reg">注册</div>
+      </n-space>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useUserStore } from '@/store/user'
 import { useMessage } from 'naive-ui'
-import { encrypt, decrypt } from '@/utils/encryp'
-import { stopScroll, canScroll } from '@/utils/util'
+import { decrypt, encrypt } from '@/utils/encryp'
+import { canScroll, stopScroll } from '@/utils/util'
 import { verifyEmail } from '@/utils/verify'
 import { useRouter } from 'vue-router'
 import localCache from '@/utils/cache'

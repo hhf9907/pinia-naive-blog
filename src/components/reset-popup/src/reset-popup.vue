@@ -26,8 +26,8 @@
           style="margin-right: 10px"
           size="mini"
           @click="handleSendEmailCode"
-          >{{ isSend ? countdown : '发送验证码' }}</n-button
-        >
+          >{{ isSend ? countdown : '发送验证码' }}
+        </n-button>
       </div>
       <div class="input-box">
         <n-input
@@ -40,26 +40,26 @@
         </n-input>
       </div>
       <div class="submit-box">
-        <div class="login-btn btn" @click="loginClick">返回登录</div>
-        <div class="reg-btn btn" @click="resetPassword">重置密码</div>
+        <div class="reg-btn btn" style="width: 100%" @click="resetPassword">
+          重置密码
+        </div>
       </div>
-      <div class="reset-pass">返回登录</div>
+      <div class="reset-pass" @click="loginClick">返回登录</div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useUserStore } from '@/store/user'
 import { useMessage } from 'naive-ui'
-import { encrypt, decrypt } from '@/utils/encryp'
-import { stopScroll, canScroll } from '@/utils/util'
+import { encrypt } from '@/utils/encryp'
+import { canScroll, stopScroll } from '@/utils/util'
 import { verifyEmail } from '@/utils/verify'
 import { useRouter } from 'vue-router'
-import localCache from '@/utils/cache'
 import bus from '@/utils/bus'
 import {
-  sendResetEmailCode,
-  handleResetEmailPassword
+  handleResetEmailPassword,
+  sendResetEmailCode
 } from '@/service/api/login/login'
 
 // 邮箱找回密码

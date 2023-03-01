@@ -69,7 +69,7 @@ const route = useRoute()
 const userStore = useUserStore()
 
 const activeKey = ref<string>('')
-const searchValue = ref<string | null>(String(route.query.keyword) || '')
+const searchValue = ref<string | null>(route.query.keyword ? String(route.query.keyword) : '')
 
 const isShowPic = ref(false)
 const showLogin = ref(false)

@@ -1,17 +1,16 @@
 <template>
   <n-card class="about" hoverable>
-    <v-md-editor
-      class="rich-content"
+    <md-editor
       v-if="about"
-      :model-value="about"
-      mode="preview"
-      ref="preview"
-      @copy-code-success="handleCopyCodeSuccess"
+      v-model="about"
+      preview-only
     />
   </n-card>
 </template>
 
 <script setup lang="ts">
+import MdEditor from 'md-editor-v3'
+import 'md-editor-v3/lib/style.css'
 import { getAbout } from '@/service/api/about/about'
 import { ref } from 'vue'
 import { useMessage } from 'naive-ui'

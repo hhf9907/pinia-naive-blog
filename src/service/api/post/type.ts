@@ -2,6 +2,7 @@ export interface PostModelType {
   postName: string
   postIntro: string
   content: string
+  cover: string | null
   categoryIds: string
   editorType: number
   postId?: string
@@ -43,6 +44,6 @@ export interface PostDetailType {
   pv: number
   userId: string
   username: string
-  commentNum: number,
+  commentNum: number
   isRelation: number
 }

@@ -36,22 +36,27 @@
         </n-input>
       </div>
       <div class="submit-box">
-        <div class="login-btn btn" @click="login">登录</div>
-        <div class="reg-btn btn" @click="handleRegister">注册</div>
+        <!--        <div class="login-btn btn" @click="login">登录</div>-->
+        <div style="width: 100%" class="reg-btn btn" @click="handleRegister">
+          注册
+        </div>
       </div>
-      <div class="reset-pass" @click="resetClick">点击重置密码</div>
+
+      <n-space justify="space-between">
+        <div class="reset-pass" @click="login">去登录</div>
+        <div class="reset-pass" @click="resetClick">点击重置密码</div>
+      </n-space>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useUserStore } from '@/store/user'
 import { useMessage } from 'naive-ui'
-import { stopScroll, canScroll } from '@/utils/util'
+import { canScroll, stopScroll } from '@/utils/util'
 import { useRouter } from 'vue-router'
-import localCache from '@/utils/cache'
 import bus from '@/utils/bus'
-import { encrypt, decrypt } from '@/utils/encryp'
+import { encrypt } from '@/utils/encryp'
 import { registerRequest } from '@/service/api/register/register'
 
 const name = ref('')

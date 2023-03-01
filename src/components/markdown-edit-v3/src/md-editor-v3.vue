@@ -1,5 +1,5 @@
 <template>
-  <div class="md-editor">
+  <div class="md-editor" :style="{height: mdEditorHeight}">
     <!-- <v-md-editor
       v-model="text"
       :height="mdEditorHeight"
@@ -7,7 +7,7 @@
       :disabled-menus="[]"
       @upload-image="handleUploadImage"
     ></v-md-editor> -->
-    <md-editor @onUploadImg="handleUploadImage" v-model="text" />
+    <md-editor  :style="{height: mdEditorHeight}" @onUploadImg="handleUploadImage"  v-model="text" />
   </div>
 </template>
 

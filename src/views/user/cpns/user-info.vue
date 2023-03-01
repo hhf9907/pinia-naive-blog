@@ -44,14 +44,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { NewspaperOutline } from '@vicons/ionicons5'
 import { UserInfoType } from '@/service/api/user/type'
 import { useUserStore } from '@/store/user'
 import { useMessage } from 'naive-ui'
 
-import { concernUser, cancelConcernUser } from '@/service/api/user/user'
+import { cancelConcernUser, concernUser } from '@/service/api/user/user'
 
 const props = defineProps<{
   userInfo: UserInfoType | null | undefined
@@ -84,18 +83,23 @@ const relation = async () => {
   padding: 30px;
   background-color: #fff;
   display: flex;
+
   .avatar,
   .operation {
     flex: 0 0 auto;
   }
+
   .avatar {
     margin-right: 20px;
   }
+
   .info {
     flex: 1 1 auto;
+
     h2 {
       margin: 0;
     }
+
     .notes {
       font-size: 15px;
       color: #72777b;
