@@ -16,13 +16,21 @@
           :post-detail="postDetail"
           @updateRelation="updateRelation"
         />
-        <v-md-editor
+        <!-- <v-md-editor
           v-if="postDetail?.content"
           :model-value="postDetail?.content"
           mode="preview"
           ref="preview"
           @copy-code-success="handleCopyCodeSuccess"
-        />
+        /> -->
+        <div style="padding: 20px 35px; background-color: #fff">
+          <md-editor
+            v-if="postDetail?.content"
+            v-model="postDetail!.content"
+            @onGetCatalog="onGetCatalog"
+            preview-only
+          />
+        </div>
         <PostComment :postId="postId" :post-detail="postDetail" />
       </div>
     </template>
@@ -31,16 +39,18 @@
       <div v-if="titles.length">
         <div class="catalogue" :class="{ fixed: isFixed }">
           <div class="title">目录</div>
-          <div
-            v-for="anchor in titles"
-            class="catalogue-item pointer text-omit"
-            :class="{ active: currentLineIndex === anchor.lineIndex }"
-            :style="{ padding: `10px 0 10px ${(anchor.indent + 1) * 20}px` }"
-            @click="handleAnchorClick(anchor)"
-            :title="anchor.title"
-            :key="anchor.title"
-          >
-            <a>{{ anchor.title }}</a>
+          <div class="catalogue-list">
+            <div
+              v-for="anchor in titles"
+              class="catalogue-item pointer text-omit"
+              :class="{ active: currentLineIndex === anchor.id }"
+              :style="{ padding: `10px 0 10px ${(anchor.level + 1) * 20}px` }"
+              @click="handleAnchorClick(anchor.id)"
+              :title="anchor.id"
+              :key="anchor.id"
+            >
+              <a>{{ anchor.id }}</a>
+            </div>
           </div>
         </div>
       </div>
@@ -49,26 +59,26 @@
 </template>
 
 <script setup lang="ts">
+import MdEditor from 'md-editor-v3'
+import 'md-editor-v3/lib/style.css'
 import { ref, onMounted, nextTick, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useMessage } from 'naive-ui'
 
 import PostHeader from './cpns/post-header.vue'
 import PostComment from './cpns/post-comment.vue'
 
 import { getPostById } from '@/service/api/post/post'
 import { PostDetailType } from '@/service/api/post/type'
-import { debounce, generateUId } from '@/utils/util'
+import { debounce } from '@/utils/util'
 import useListenerResize from '@/hooks/useListenerResize'
 
 const route = useRoute()
-const message = useMessage()
-const preview = ref()
+
 const currentLineIndex = ref('1')
 
 const loading = ref(false)
 const postDetail = ref<PostDetailType>()
-const titles = ref<any[]>([])
+const titles = ref<{ id: string; level: number; offsetTop: number }[]>([])
 const isFixed = ref(false)
 const postId =
   typeof route.params.postId === 'string' ? route.params.postId : ''
@@ -105,87 +115,55 @@ const getData = async () => {
   postDetail.value = post
   document.title = post.postName
   if (postDetail.value!.editorType === 2) {
-    postDetail.value!.content = setHtmlContent(postDetail.value!.content)
+    postDetail.value!.content = postDetail.value!.content
   }
   loading.value = false
-  nextTick(() => {
-    getTitles()
-  })
 }
 
 onMounted(() => {
   getData()
 })
 
-const setHtmlContent = (content: string) => {
-  content = replaceHtml(content, '<h1')
-  content = replaceHtml(content, '<h2')
-  content = replaceHtml(content, '<h3')
-  content = replaceHtml(content, '<h4')
-  content = replaceHtml(content, '<h5')
-  content = replaceHtml(content, '<h6')
-  return content
-}
+// const getTitles = () => {
+//   const anchors = preview.value.$el.querySelectorAll('h1,h2,h3,h4,h5,h6')
+//   const titleList = Array.from(anchors).filter(
+//     (title: any) => !!title.innerText.trim()
+//   )
 
-const replaceHtml = (content: string, subStr: string) => {
-  let pos = content.indexOf(subStr)
-  let index = 0
+//   if (!titleList.length) {
+//     titles.value = []
+//     return
+//   }
 
-  while (pos > -1) {
-    index++
-    if (index == 100) {
-      // 防止死循环。。。。预防万一电脑炸
-      break
-    }
-    content =
-      content.slice(0, pos + 3) +
-      ` data-v-md-line=${generateUId()} ` +
-      content.slice(pos + 3, content.length)
-    pos = content.indexOf(subStr, pos + 50)
-  }
-  return content
-}
+//   const hTags = Array.from(
+//     new Set(titleList.map((title: any) => title.tagName))
+//   ).sort()
 
-const getTitles = () => {
-  const anchors = preview.value.$el.querySelectorAll('h1,h2,h3,h4,h5,h6')
-  const titleList = Array.from(anchors).filter(
-    (title: any) => !!title.innerText.trim()
-  )
+//   titles.value = titleList.map((el: any, index: number) => {
+//     const previewRef = preview.value.$el.querySelector(
+//       `[data-v-md-line="${el.getAttribute('data-v-md-line')}"]`
+//     )
+//     if (index === 0) {
+//       currentLineIndex.value = el.getAttribute('data-v-md-line')
+//     }
+//     return {
+//       title: el.innerText,
+//       lineIndex: el.getAttribute('data-v-md-line'),
+//       indent: hTags.indexOf(el.tagName),
+//       el: previewRef,
+//       offsetTop: previewRef.offsetTop || 0
+//     }
+//   })
+//   console.log(titles.value)
+// }
 
-  if (!titleList.length) {
-    titles.value = []
-    return
-  }
-
-  const hTags = Array.from(
-    new Set(titleList.map((title: any) => title.tagName))
-  ).sort()
-
-  titles.value = titleList.map((el: any, index: number) => {
-    const previewRef = preview.value.$el.querySelector(
-      `[data-v-md-line="${el.getAttribute('data-v-md-line')}"]`
-    )
-    if (index === 0) {
-      currentLineIndex.value = el.getAttribute('data-v-md-line')
-    }
-    return {
-      title: el.innerText,
-      lineIndex: el.getAttribute('data-v-md-line'),
-      indent: hTags.indexOf(el.tagName),
-      el: previewRef,
-      offsetTop: previewRef.offsetTop || 0
-    }
-  })
-  console.log(titles.value)
-}
-
-const handleAnchorClick = (anchor: any) => {
-  const { lineIndex, el } = anchor
-  currentLineIndex.value = lineIndex
-  if (el) {
+const handleAnchorClick = (eleId: string) => {
+  const offsetTop = document.getElementById(eleId)?.offsetTop
+  currentLineIndex.value = eleId
+  if (offsetTop) {
     // 滚动到指定的位置
     window.scrollTo({
-      top: el.offsetTop,
+      top: offsetTop + 100,
       behavior: 'smooth'
     })
   }
@@ -197,16 +175,38 @@ const setLineIndex = (scrollTo: number) => {
       titles.value[index]?.offsetTop < scrollTo &&
       titles.value[index + 1]?.offsetTop > scrollTo
     ) {
-      currentLineIndex.value = item.lineIndex
+      currentLineIndex.value = item.id
     }
     if (scrollTo > titles.value[titles.value.length - 1]?.offsetTop) {
-      currentLineIndex.value = item.lineIndex
+      currentLineIndex.value = item.id
     }
   })
 }
 
-const handleCopyCodeSuccess = () => {
-  message.success('复制成功~')
+const onGetCatalog = (list: any) => {
+  nextTick(() => {
+    const titlelist = Array.from(list).map((item: any) => {
+      return {
+        id: item.text,
+        level: item.level,
+        offsetTop: document.getElementById(item.text)?.offsetTop || 0
+      }
+    })
+    const maxNum = Math.max(...titlelist.map((item) => item.level))
+
+    for (let i = 1; i < maxNum; i++) {
+      const someI = titlelist.some((item) => item.level === i)
+      if (!someI) {
+        titlelist.forEach((item) => {
+          if (item.level > 1) {
+            item.level = item.level - 1
+          }
+        })
+      }
+    }
+    titles.value = titlelist
+    currentLineIndex.value = titlelist[0].id
+  })
 }
 
 const updateRelation = (isRelation: number) => {
@@ -239,18 +239,18 @@ const updateRelation = (isRelation: number) => {
       background-color: #fff;
       margin-bottom: 20px;
     }
-    :deep(.catalogue::-webkit-scrollbar) {
+    :deep(.catalogue-list::-webkit-scrollbar) {
       width: 5px; /*滚动条宽度*/
       height: 10px; /*滚动条高度*/
     }
     /*定义滚动条轨道 内阴影+圆角*/
-    :deep(.catalogue::-webkit-scrollbar-track) {
+    :deep(.catalogue-list::-webkit-scrollbar-track) {
       box-shadow: 0px 1px 3px #f1f1f1 inset; /*滚动条的背景区域的内阴影*/
       border-radius: 10px; /*滚动条的背景区域的圆角*/
       background-color: #f1f1f1; /*滚动条的背景颜色*/
     }
     /*定义滑块 内阴影+圆角*/
-    :deep(.catalogue::-webkit-scrollbar-thumb) {
+    :deep(.catalogue-list::-webkit-scrollbar-thumb) {
       box-shadow: 0px 1px 3px #c1c1c1 inset; /*滚动条的内阴影*/
       border-radius: 10px; /*滚动条的圆角*/
       background-color: #c1c1c1; /*滚动条的背景颜色*/
@@ -258,36 +258,47 @@ const updateRelation = (isRelation: number) => {
     .catalogue {
       box-sizing: border-box;
       width: 300px;
-      min-height: 400px;
-      max-height: 700px;
-      overflow-y: auto;
       background-color: #fff;
       position: relative;
-      padding-right: 10px;
+
       .title {
         font-weight: 500;
+        height: 46px;
         padding: 10px 20px;
+        box-sizing: border-box;
         font-size: 16px;
-        line-height: 2rem;
         color: #1d2129;
         border-bottom: 1px solid #e4e6eb;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 90;
+        background-color: #fff;
       }
-      .catalogue-item:hover {
-        background-color: #f7f8fa;
-      }
-      .catalogue-item.active {
-        color: #18a058;
-        position: relative;
-        ::before {
-          content: '';
-          position: absolute;
-          top: 4px;
-          left: 0;
-          margin-top: 7px;
-          width: 4px;
-          height: 16px;
-          background: #18a058;
-          border-radius: 0 4px 4px 0;
+      .catalogue-list {
+        padding-right: 10px;
+        padding-top: 46px;
+        min-height: 400px;
+        max-height: 700px;
+        overflow-y: auto;
+        .catalogue-item:hover {
+          background-color: #f7f8fa;
+        }
+        .catalogue-item.active {
+          color: #18a058;
+          position: relative;
+          ::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 0;
+            margin-top: 7px;
+            width: 4px;
+            height: 16px;
+            background: #18a058;
+            border-radius: 0 4px 4px 0;
+          }
         }
       }
     }

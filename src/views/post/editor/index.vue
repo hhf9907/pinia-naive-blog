@@ -77,7 +77,7 @@ import { useMessage, FormRules, FormInst } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
 
 // components
-import MarkdownEditor from '@/components/markdown-edit'
+import MarkdownEditor from '@/components/markdown-edit-v3'
 import WangEdit from '@/components/wangeditor'
 
 import { PostModelType } from '@/service/api/post/type'
